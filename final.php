@@ -5,9 +5,9 @@ $end = '2021-04-18 11:30';
 
 function hourDist ($start, $end) {
 	$times = range(strtotime($start) / 60, (strtotime($end) - 1) / 60, 60);
-	foreach ($times as $k => $m) {
-		$hStart = $k ? ($m - ($m % 60)) : $m;
-		$hEnd = count($times) == $k+1 ? $m : ($m + (60 - $m % 60));
+	foreach ($times as $k => $v) {
+		$hStart = $k ? ($v - ($v % 60)) : $v;
+		$hEnd = count($times) == $k+1 ? $v : ($v + (60 - $v % 60));
 		$times[$k] = [
 			'hStart' => DateTime::createFromFormat('U', $hStart * 60)->format('Y-m-d H:i'),
 			'hEnd' => DateTime::createFromFormat('U', $hEnd * 60)->format('Y-m-d H:i'),
@@ -21,9 +21,9 @@ $cost = ['site' => "ANC1603",'subimpact_tech_name' => "36850",'subimpact_data_na
 
 function hourDistCost ($start, $end, $cost) {
 	$times = hourDist($start, $end);
-	foreach ($times as $k => $m) {
-		$h = DateTime::createFromFormat('Y-m-d H:i', $m['hStart'])->format('G');
-		$times[$k]['price'] = $m['diff'] * (empty($cost["hr{$h}"]) ? 0 : $cost["hr{$h}"]) / 60;
+	foreach ($times as $k => $v) {
+		$h = DateTime::createFromFormat('Y-m-d H:i', $v['hStart'])->format('G');
+		$times[$k]['price'] = $v['diff'] * (empty($cost["hr{$h}"]) ? 0 : $cost["hr{$h}"]) / 60;
 	}
 	return $times;
 }
